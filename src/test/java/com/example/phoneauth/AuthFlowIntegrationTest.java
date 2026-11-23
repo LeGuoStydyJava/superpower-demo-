@@ -67,4 +67,18 @@ class AuthFlowIntegrationTest {
     void meWithoutTokenReturns401() throws Exception {
         mockMvc.perform(get("/api/users/me")).andExpect(status().isUnauthorized());
     }
+
+    @Test
+    void malformedJsonReturns400() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{invalid json"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void unknownPathReturns404() throws Exception {
+        mockMvc.perform(get("/api/does-not-exist"))
+                .andExpect(status().isNotFound());
+    }
 }
